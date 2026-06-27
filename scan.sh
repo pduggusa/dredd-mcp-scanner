@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 # dredd-mcp-scanner — vet a GitHub-hosted MCP repo before you install it
+# version: 1.1.0
+#
+# Now resolves the full transitive npm/pypi dependency graph (Shai-Hulud class),
+# not just the repo name. Verdict is signed and carries a dep_graph field.
 #
 # Usage:  bash scan.sh https://github.com/owner/repo
 # Or:     bash scan.sh owner/repo

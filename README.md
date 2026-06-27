@@ -1,9 +1,21 @@
 # dredd-mcp-scanner
 
-> Vet an MCP-shaped GitHub repo before you install it.
+> Vet an MCP-shaped GitHub repo — and its whole dependency graph — before you install it.
 > *Jeevesus saves. Dredd judges.*
 
-A tiny bash script that hits the public Dredd scan endpoint and tells you whether the target repo is safe to clone. Backed by the DugganUSA threat-intel corpus (1.13M+ IOCs).
+A tiny bash script that hits the public Dredd scan endpoint and tells you whether the target repo is safe to clone. Backed by the DugganUSA threat-intel corpus (1.10M+ IOCs).
+
+## What's New — it checks the dependency graph, not just the repo
+
+Dredd no longer stops at the repo name. It resolves the target's **full transitive npm/pypi dependency graph** and joins *every* package — direct and deep transitive — against the IOC corpus, including the **OSV malicious-package feeds for npm and PyPI**. This is the **Shai-Hulud class** of attack: the malicious code is rarely in the repo you scanned — it's buried in a transitive dependency whose publish token got stolen. A name-only scan is blind to exactly that.
+
+The scan returns a **signed verdict** (`BLOCK` / `ADVISORY` / `ALLOW`) plus a **`dep_graph`** field telling you whether the transitive tree was actually evaluated:
+
+```
+DREDD_VERBOSE=1 bash scan.sh owner/repo   # prints the full JSON incl. dep_graph
+```
+
+If the repo exposes no resolvable manifest, `dep_graph.evaluated` is `false` and you get an advisory — Dredd tells you it couldn't see the tree rather than pretending it's clean.
 
 ## Quick start
 
@@ -40,10 +52,10 @@ Use it in CI to fail a build that pulls a bad MCP:
 ## What it actually does
 
 1. Sends the GitHub URL to `https://analytics.dugganusa.com/api/v1/dredd/scan`
-2. The Dredd backend fetches the repo's `package.json` / `requirements.txt`
-3. Cross-references every dependency against our IOC corpus (Socket, Aikido, GitGuardian, ReversingLabs, Phylum, StepSecurity, Wiz, URLhaus, OTX, etc.)
+2. The Dredd backend fetches the repo's `package.json` / `requirements.txt` and **resolves the full transitive dependency graph** (npm/pypi)
+3. Cross-references **every** package — direct and transitive — against our IOC corpus (Socket, Aikido, GitGuardian, ReversingLabs, Phylum, StepSecurity, Wiz, URLhaus, OTX, plus OSV malicious-package feeds for npm and PyPI). This is what catches Shai-Hulud-class compromise hiding deep in the tree.
 4. Also checks the repo name itself against `mcp_findings` (URLhaus typosquat catches, GlassWorm flags, SmartLoader, etc.)
-5. Returns a JSON verdict: `BLOCK`, `ADVISORY`, or `ALLOW`, HMAC-signed.
+5. Returns a signed JSON verdict: `BLOCK`, `ADVISORY`, or `ALLOW`, HMAC-signed, with a `dep_graph` field reporting whether the transitive tree was evaluated.
 
 ## Real examples that come back BAD
 
@@ -85,6 +97,14 @@ Both registered on the official Model Context Protocol Registry:
 
 - **Jeevesus** — `io.github.pduggusa/dugganusa-threat-intel` — natural-language threat-intel search
 - **Dredd MCP** — `io.github.pduggusa/dredd-mcp` — pre-flight invocation security check
+
+## Why trust the corpus
+
+The IOC corpus behind every verdict is independently checkable on three live, no-auth endpoints:
+
+- **Novelty** — https://analytics.dugganusa.com/api/v1/feed-uniqueness (~75%+ of our IOCs aren't in ThreatFox)
+- **Timeliness** — https://analytics.dugganusa.com/api/v1/kev-lead (~31 days ahead of CISA KEV)
+- **Accuracy** — https://analytics.dugganusa.com/api/v1/spamhaus-validation (Spamhaus corroborates our calls)
 
 ## License
 
