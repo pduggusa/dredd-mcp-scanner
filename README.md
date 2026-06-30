@@ -3,7 +3,7 @@
 > Vet an MCP-shaped GitHub repo — and its whole dependency graph — before you install it.
 > *Jeevesus saves. Dredd judges.*
 
-A tiny bash script that hits the public Dredd scan endpoint and tells you whether the target repo is safe to clone. Backed by the DugganUSA threat-intel corpus (1.10M+ IOCs).
+A tiny bash script that hits the public Dredd scan endpoint and tells you whether the target repo is safe to clone. Backed by the DugganUSA threat-intel corpus (1.5M+ IOCs).
 
 ## What's New — it checks the dependency graph, not just the repo
 
@@ -100,11 +100,12 @@ Both registered on the official Model Context Protocol Registry:
 
 ## Why trust the corpus
 
-The IOC corpus behind every verdict is independently checkable on three live, no-auth endpoints:
+The IOC corpus behind every verdict is independently checkable on four live, no-auth endpoints:
 
 - **Novelty** — https://analytics.dugganusa.com/api/v1/feed-uniqueness (~75%+ of our IOCs aren't in ThreatFox)
-- **Timeliness** — https://analytics.dugganusa.com/api/v1/kev-lead (~31 days ahead of CISA KEV)
+- **Timeliness** — https://analytics.dugganusa.com/api/v1/kev-lead (a live ledger of how far ahead of CISA KEV we flagged each exploited CVE — leads, same-day, and no-receipt shown honestly)
 - **Accuracy** — https://analytics.dugganusa.com/api/v1/spamhaus-validation (Spamhaus corroborates our calls)
+- **Liveness** — https://analytics.dugganusa.com/api/v1/feed-efficacy (opt-in consumer reports of when our indicators actually fire on real traffic — proof the feed is operationally live, not just large)
 
 ## License
 

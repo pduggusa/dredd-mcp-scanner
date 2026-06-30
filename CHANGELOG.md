@@ -2,6 +2,16 @@
 
 All notable changes to dredd-mcp-scanner are documented here.
 
+## [1.1.1] - 2026-06-30
+
+### Added
+- Documented the fourth live validation axis — Liveness (`/api/v1/feed-efficacy`).
+
+### Changed
+- Refreshed IOC corpus copy to 1.5M+ IOCs (~1.57M live).
+- Reworded the Timeliness validation reference to point at the live kev-lead ledger instead of a fixed "~31 days ahead" average.
+- Version stamp bumped to `1.1.1` in the `scan.sh` header.
+
 ## [1.1.0] - 2026-06-27
 
 ### Added
