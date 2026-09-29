@@ -3,7 +3,7 @@
 > Vet an MCP-shaped GitHub repo — and its whole dependency graph — before you install it.
 > *Jeevesus saves. Dredd judges.*
 
-A tiny bash script that hits the public Dredd scan endpoint and tells you whether the target repo is safe to clone. Backed by the DugganUSA threat-intel corpus (1.5M+ IOCs).
+A tiny bash script that hits the public Dredd scan endpoint and tells you whether the target repo is safe to clone. Backed by the DugganUSA threat-intel corpus (1.9M+ IOCs).
 
 ## What's New — it checks the dependency graph, not just the repo
 
