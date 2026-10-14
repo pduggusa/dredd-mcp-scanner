@@ -1,9 +1,12 @@
 # dredd-mcp-scanner
 
-> Vet an MCP-shaped GitHub repo — and its whole dependency graph — before you install it.
-> *Jeevesus saves. Dredd judges.*
+**You do you. I do me. We share contexts.**
 
-A tiny bash script that hits the public Dredd scan endpoint and tells you whether the target repo is safe to clone. Backed by the DugganUSA threat-intel corpus (1.9M+ IOCs).
+Your agent keeps its core; Dredd judges a repo's context before it crosses in.
+
+> Vet an MCP-shaped GitHub repo — and its whole dependency graph — before you install it.
+
+A tiny bash script that hits the public Dredd scan endpoint and tells you whether the target repo is safe to clone. Backed by the DugganUSA Feed ([live counts](https://analytics.dugganusa.com/api/v1/search/stats)).
 
 ## What's New — it checks the dependency graph, not just the repo
 
@@ -53,7 +56,7 @@ Use it in CI to fail a build that pulls a bad MCP:
 
 1. Sends the GitHub URL to `https://analytics.dugganusa.com/api/v1/dredd/scan`
 2. The Dredd backend fetches the repo's `package.json` / `requirements.txt` and **resolves the full transitive dependency graph** (npm/pypi)
-3. Cross-references **every** package — direct and transitive — against our IOC corpus (Socket, Aikido, GitGuardian, ReversingLabs, Phylum, StepSecurity, Wiz, URLhaus, OTX, plus OSV malicious-package feeds for npm and PyPI). This is what catches Shai-Hulud-class compromise hiding deep in the tree.
+3. Cross-references **every** package — direct and transitive — against our IOC corpus (Socket, Aikido, GitGuardian, ReversingLabs, Phylum, StepSecurity, Wiz, URLhaus, plus OSV malicious-package feeds for npm and PyPI). This is what catches Shai-Hulud-class compromise hiding deep in the tree.
 4. Also checks the repo name itself against `mcp_findings` (URLhaus typosquat catches, GlassWorm flags, SmartLoader, etc.)
 5. Returns a signed JSON verdict: `BLOCK`, `ADVISORY`, or `ALLOW`, HMAC-signed, with a `dep_graph` field reporting whether the transitive tree was evaluated.
 
@@ -119,4 +122,4 @@ MIT.
 
 ---
 
-*Built in Minneapolis on $75/month. Read-only. 95% epistemic ceiling. Receipts do the work.*
+*Read-only. 95% epistemic ceiling. Threat intelligence you can check.* Contact: help@dugganusa.com.
