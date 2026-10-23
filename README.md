@@ -1,5 +1,7 @@
 # dredd-mcp-scanner
 
+**Docs:** https://docs.dugganusa.com/agents/dredd/
+
 **You do you. I do me. We share contexts.**
 
 Your agent keeps its core; Dredd judges a repo's context before it crosses in.
